@@ -17,7 +17,6 @@ app.get("/createReceipt", function(req, res) {
 
 
 
-
 //port 3000; localhost:3000
 app.listen(3000, function() {
     console.log("server started");
