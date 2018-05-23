@@ -1,0 +1,16 @@
+<% include partials/header %>
+
+    <h3>Create Recipe</h3>
+    <form action="/createRecipe" method="POST">
+        <div class="form-group">
+            <label for="recipeTitle">Recipe Title</label>
+            <input type="text" name="recipe[title]" class="form-control" id="recipeTitle" placeholder="Recipe Title">
+        </div>
+        <div class="form-group">
+            <label for="recipeText">Example textarea</label>
+            <textarea name="recipe[text]" class="form-control" id="recipeText" rows="5">Recipe Text...</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+<% include partials/footer %>

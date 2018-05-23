@@ -1,0 +1,22 @@
+<% include partials/header %>
+
+<h3>
+    All Recipes
+</h3>
+
+<table class="table">
+    <thead>
+        <th scope="col">Title</th>
+        <th scope="col">Text</th>
+        <th scope="col">Date</th>
+    </thead>
+    <% recipes.forEach(function(recipe) { %>
+        <tr>
+            <td><%= recipe.title %></td>
+            <td><%= recipe.text %></td>
+            <td><%= recipe.created %></td>
+        </tr>
+    <% }); %>
+</table>
+
+<% include partials/footer %>
