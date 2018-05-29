@@ -20,8 +20,14 @@ app.get("/", function(req, res) {
 
 
 //show get route
-app.get("/showRecipe", function(req, res) {
-    res.render("showRecipe");
+app.get("/showRecipe/:id", function(req, res) {
+
+    recipeMongooseObject.findById(req.params.id, function(err, foundRecipe) {
+        if(err) console.log(err);
+        else {
+            res.render("showRecipe", {recipe: foundRecipe});
+        }
+    });
 });
 
 

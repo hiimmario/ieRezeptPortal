@@ -4,7 +4,7 @@
     All Recipes
 </h3>
 
-<table class="table">
+<table class="table table-bordered">
     <thead>
         <th scope="col">Title</th>
         <th scope="col">Text</th>
@@ -12,9 +12,9 @@
     </thead>
     <% recipes.forEach(function(recipe) { %>
         <tr>
-            <td><%= recipe.title %></td>
+            <td><a class="header" href="/showRecipe/<%= recipe._id %>"><%= recipe.title %></a></td>
             <td><%= recipe.text %></td>
-            <td><%= recipe.created %></td>
+            <td><%= recipe.created.toLocaleDateString("de-DE") %></td>
         </tr>
     <% }); %>
 </table>

@@ -1,5 +1,14 @@
 <% include partials/header %>
 
-<h3>Show Recipe</h3>
+<h3><%= recipe.title %> - <%= recipe.created.toLocaleDateString("de-DE") %></h3>
+<div>
+    <%= recipe.text %>
+</div>
+
+<a href="#" class="badge badge-success">Success</a>
+<a href="#" class="badge badge-danger">Danger</a>
+
+<label for="input-7-xs" class="control-label">Extra Small Rating</label>
+<input id="input-7-xs" class="rating rating-loading" value="1" data-min="0" data-max="5" data-step="0.5" data-size="xs"><hr/>
 
 <% include partials/footer %>
