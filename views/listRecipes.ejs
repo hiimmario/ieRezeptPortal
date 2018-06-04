@@ -9,12 +9,14 @@
         <th scope="col">Title</th>
         <th scope="col">Text</th>
         <th scope="col">Date</th>
+        <th scope="col">User</th>
     </thead>
     <% recipes.forEach(function(recipe) { %>
         <tr>
             <td><a class="header" href="/showRecipe/<%= recipe._id %>"><%= recipe.title %></a></td>
             <td><%= recipe.text %></td>
             <td><%= recipe.created.toLocaleDateString("de-DE") %></td>
+            <td><%= recipe.author.username %></td>
         </tr>
     <% }); %>
 </table>

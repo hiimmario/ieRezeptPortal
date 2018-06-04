@@ -5,10 +5,12 @@
     <%= recipe.text %>
 </div>
 
-<a href="#" class="badge badge-success">Success</a>
-<a href="#" class="badge badge-danger">Danger</a>
+<form action="/showRecipe/<%= recipe.id %>/like" method="POST">
+    <button type="submit" class="btn btn-success">Like</button>
+</form>
 
-<label for="input-7-xs" class="control-label">Extra Small Rating</label>
-<input id="input-7-xs" class="rating rating-loading" value="1" data-min="0" data-max="5" data-step="0.5" data-size="xs"><hr/>
+<form action="/showRecipe/<%= recipe.id %>/unlike" method="POST">
+    <button type="submit" class="btn btn-danger">Unlike</button>
+</form>
 
 <% include partials/footer %>

@@ -6,10 +6,14 @@ var voteSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "recipe"
     },
-    upvote: Boolean,
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    },
+    like: Boolean,
     created: {
         type: Date, default: Date.now
     }
 });
 
-module.exports = mongoose.model("recipe", voteSchema);
+module.exports = mongoose.model("vote", voteSchema);
