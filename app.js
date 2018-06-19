@@ -97,7 +97,7 @@ app.get("/editRecipe/:id", function(req, res) {
             var myVote = foundRecipe.votes.filter(vote => vote.author == req.user.id);
             var countVotes = foundRecipe.votes.length;
 
-            res.render("editRecipe", {foundRecipe: foundRecipe[0], iLike: (myVote.length > 0 ? true : false), countVotes: countVotes});
+            res.render("editRecipe", {recipe: foundRecipe, iLike: (myVote.length > 0 ? true : false), countVotes: countVotes});
         }
     });
 });

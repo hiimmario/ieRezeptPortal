@@ -1,29 +1,31 @@
 <% include partials/header %>
 
-
-<div class="form-group">
-    <label for="recipeTitle">Recipe Title</label>
-    <input type="text" name="recipe[title]" class="form-control" id="recipeTitle" placeholder="<%= recipe.title %>">
-</div>
-<div class="form-group">
-    <label for="recipeText">Your Description</label>
-    <textarea name="recipe[text]" class="form-control" id="recipeText" rows="5"><%= recipe.text %></textarea>
-</div>
-
-<div class="form-group">
-    <label for="createdDate">Created</label>
-    <span name="createdDate"><%= recipe.created.toLocaleDateString("de-DE") %></span>
-</div>
-
-<div class="form-group">
-    <label for="recipeTitle">Likes</label>
-    <span name="recipeTitle"><%= countVotes %></span>
-</div>
-<div class="form-group">
-    <label for="recipeTitle">iLike</label>
-    <span name="recipeTitle"><%= iLike %></span>
-</div>
-
+<fieldset disabled>
+    <div class="form-group">
+        <label for="recipeTitle">Recipe Title</label>
+        <input type="text" name="recipe[title]" class="form-control" id="recipeTitle" placeholder="<%= recipe.title %>">
+    </div>
+    <div class="form-group">
+        <label for="recipeCreated">User</label>
+        <input type="text" class="form-control" id="recipeCreated" placeholder="<%= recipe.author.username %>">
+    </div>
+    <div class="form-group">
+        <label for="recipeCreated">Create Date</label>
+        <input type="text" class="form-control" id="recipeCreated" placeholder="<%= recipe.created.toLocaleDateString("de-DE") %> %>">
+    </div>
+    <div class="form-group">
+        <label for="recipeLikesCount">Likes</label>
+        <input type="text" class="form-control" id="recipeLikesCount" placeholder="<%= countVotes %>">
+    </div>
+    <div class="form-group">
+        <label for="iLike">iLike</label>
+        <input type="text" class="form-control" id="iLike" placeholder="<%= iLike %>">
+    </div>
+    <div class="form-group">
+        <label for="recipeText">Recipe</label>
+        <textarea class="form-control" id="recipeText" rows="5"><%= recipe.text %></textarea>
+    </div>
+</fieldset>
 
 <form action="/showRecipe/<%= recipe.id %>/like" method="POST">
     <button type="submit" class="btn btn-success">Like</button>
@@ -33,6 +35,8 @@
     <button type="submit" class="btn btn-danger">Unlike</button>
 </form>
 
-
+<form action="/editRecipe/<%= recipe.id %>" method="GET">
+    <button type="submit" class="btn btn-warnning">Edit</button>
+</form>
 
 <% include partials/footer %>
