@@ -1,6 +1,8 @@
 var express                     = require("express");
 var app = express();
 
+
+
 var bodyParser                  = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -101,6 +103,20 @@ app.get("/editRecipe/:id", function(req, res) {
         }
     });
 });
+
+
+app.put("/editRecipe/:id", function(req, res) {
+
+    console.log("du bist hier");
+
+    recipeMongooseObject.findByIdAndUpdate(req.params.id, {text: req.recipe.text, title: req.recipe.title}, function(err, updatedRecipe) {
+        if(err) console.log(err);
+        else {
+            res.redirect("/showRecipe/" + updatedRecipe.id);
+        }
+    })
+});
+
 
 //show get route
 app.get("/showRecipe/:id", function(req, res) {
