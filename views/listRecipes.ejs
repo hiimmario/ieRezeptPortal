@@ -10,6 +10,7 @@
         <th scope="col">Text</th>
         <th scope="col">Date</th>
         <th scope="col">User</th>
+        <th scope="col">Count Likes</th>
     </thead>
     <% recipes.forEach(function(recipe) { %>
         <tr>
@@ -17,6 +18,7 @@
             <td><%= recipe.text %></td>
             <td><%= recipe.created.toLocaleDateString("de-DE") %></td>
             <td><%= recipe.author.username %></td>
+            <td><%= recipe.votes.length %></td>
         </tr>
     <% }); %>
 </table>

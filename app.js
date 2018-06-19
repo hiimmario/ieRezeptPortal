@@ -93,10 +93,12 @@ app.get("/showRecipe/:id", function(req, res) {
     recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
         if(err) console.log(err);
         else {
-            console.log("############");
+            //gibt eine liste an votes retour die gefiltert werden, kann hier nur ein einziger sein da limitiert beim voten
+            var myVote = foundRecipe.votes.filter(vote => vote.author == req.user.id);
+            var countVotes = foundRecipe.votes.length;
 
-            console.log(foundRecipe.votes);
-            res.render("showRecipe", {recipe: foundRecipe});
+            //(myVote.length > 0 ? true : false) wenn die länge der liste meiner vote(s) größer 0 ist habe ich das rezept geliked
+            res.render("showRecipe", {recipe: foundRecipe, iLike: (myVote.length > 0 ? true : false), countVotes: countVotes});
         }
     });
 });
@@ -104,58 +106,55 @@ app.get("/showRecipe/:id", function(req, res) {
 
 //like route
 app.post("/showRecipe/:id/like", function(req, res) {
-    recipeMongooseObject.findById(req.params.id, function (err, foundRecipe) {
+    recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
         if (err) console.log(err);
         else {
-            console.log(foundRecipe);
 
-            var like = true;
-            var author = req.user.id;
+            var myVote = foundRecipe.votes.filter(vote => vote.author == req.user.id);
 
-            var recipe = foundRecipe.id;
+            //habe ich dafür gevotet
+            if(myVote.length == 0) {
+                var like = true;
+                var author = req.user.id;
+                var recipe = foundRecipe.id;
 
-            var vote = {
-                author: author,
-                recipe: recipe,
-                like: like
-            };
+                var vote = {
+                    author: author,
+                    recipe: recipe,
+                    like: like
+                };
 
-            voteMongooseObject.create(vote, function (err, newVote) {
-                if (err) console.log(err);
-                else {
-                    console.log(newVote);
-                    res.render("showRecipe", {recipe: foundRecipe});
-                }
-            });
+                voteMongooseObject.create(vote, function (err, newVote) {
+                    if (err) console.log(err);
+                    else {
+                        foundRecipe.votes.push(newVote._id);
+                        foundRecipe.save();
+                    }
+                });
+            }
+            res.redirect("/showRecipe/" + foundRecipe.id);
         }
     });
 });
 
-//unlike route
 app.post("/showRecipe/:id/unlike", function(req, res) {
-    recipeMongooseObject.findById(req.params.id, function (err, foundRecipe) {
+    recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
         if (err) console.log(err);
         else {
-            console.log(foundRecipe);
+            // es kann nur einen vote geben - prüfung bei vote create
+            myVoteList = foundRecipe.votes.filter(vote => vote.author == req.user.id);
 
-            var like = false;
-            var author = req.user.id;
+            if(myVoteList.length > 0) {
+                myVote = myVoteList[0];
 
-            var recipe = foundRecipe.id;
+                voteMongooseObject.findByIdAndRemove(myVote.id, function(req, todo) {
+                    if(err) console.log(err);
 
-            var vote = {
-                author: author,
-                recipe: recipe,
-                like: like
-            };
-
-            voteMongooseObject.create(vote, function (err, newVote) {
-                if (err) console.log(err);
-                else {
-                    console.log(newVote);
-                    res.render("showRecipe", {recipe: foundRecipe});
-                }
-            });
+                    foundRecipe.votes = foundRecipe.votes.filter(vote => vote.id != myVote.id);
+                    foundRecipe.save();
+                });
+            }
+            res.redirect("/showRecipe/" + foundRecipe.id);
         }
     });
 });
@@ -164,15 +163,18 @@ app.post("/showRecipe/:id/unlike", function(req, res) {
 //listrecipes get route
 app.get("/listRecipes", function(req, res) {
 
-    console.log(req.user);
-
-    recipeMongooseObject.find({}, function(err, recipes) {
+    recipeMongooseObject.find({}).populate("votes").exec(function(err, recipes) {
         if(err) {
             console.log(err);
         } else {
+            console.log(recipes);
             res.render("listRecipes", {recipes: recipes});
         }
     });
+});
+
+app.get("/contact", function(req, res) {
+    res.render("contact");
 });
 
 //create routes
@@ -197,8 +199,7 @@ app.post("/createRecipe", function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            console.log(newRecipe);
-            res.render("showRecipe", {recipe: newRecipe});
+            res.redirect("/showRecipe/" + newRecipe.id);
         }
     });
 });

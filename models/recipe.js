@@ -11,7 +11,13 @@ var recipeSchema = new mongoose.Schema({
         },
         username: String
     },
-    created: {type: Date, default: Date.now}
+    created: {type: Date, default: Date.now},
+    votes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "vote"
+        }
+    ]
 });
 
 module.exports = mongoose.model("recipe", recipeSchema);

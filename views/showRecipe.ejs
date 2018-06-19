@@ -5,6 +5,14 @@
     <%= recipe.text %>
 </div>
 
+<div>
+    <%= iLike %>
+</div>
+
+<div>
+    <%= countVotes %>
+</div>
+
 <form action="/showRecipe/<%= recipe.id %>/like" method="POST">
     <button type="submit" class="btn btn-success">Like</button>
 </form>
