@@ -1,17 +1,29 @@
 <% include partials/header %>
 
-<h3><%= recipe.title %> - <%= recipe.created.toLocaleDateString("de-DE") %></h3>
-<div>
-    <%= recipe.text %>
+
+<div class="form-group">
+    <label for="recipeTitle">Recipe Title</label>
+    <input type="text" name="recipe[title]" class="form-control" id="recipeTitle" placeholder="<%= recipe.title %>">
+</div>
+<div class="form-group">
+    <label for="recipeText">Your Description</label>
+    <textarea name="recipe[text]" class="form-control" id="recipeText" rows="5"><%= recipe.text %></textarea>
 </div>
 
-<div>
-    <%= iLike %>
+<div class="form-group">
+    <label for="createdDate">Created</label>
+    <span name="createdDate"><%= recipe.created.toLocaleDateString("de-DE") %></span>
 </div>
 
-<div>
-    <%= countVotes %>
+<div class="form-group">
+    <label for="recipeTitle">Likes</label>
+    <span name="recipeTitle"><%= countVotes %></span>
 </div>
+<div class="form-group">
+    <label for="recipeTitle">iLike</label>
+    <span name="recipeTitle"><%= iLike %></span>
+</div>
+
 
 <form action="/showRecipe/<%= recipe.id %>/like" method="POST">
     <button type="submit" class="btn btn-success">Like</button>
@@ -20,5 +32,7 @@
 <form action="/showRecipe/<%= recipe.id %>/unlike" method="POST">
     <button type="submit" class="btn btn-danger">Unlike</button>
 </form>
+
+
 
 <% include partials/footer %>

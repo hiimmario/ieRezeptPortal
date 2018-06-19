@@ -88,6 +88,21 @@ app.get("/favourites", function(req, res) {
 });
 
 //show get route
+app.get("/editRecipe/:id", function(req, res) {
+
+    recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
+        if(err) console.log(err);
+        else {
+            //gibt eine liste an votes retour die gefiltert nach ich bin derjeniger der geliked hat, kann hier nur ein einziger sein da limitiert beim voten
+            var myVote = foundRecipe.votes.filter(vote => vote.author == req.user.id);
+            var countVotes = foundRecipe.votes.length;
+
+            res.render("editRecipe", {foundRecipe: foundRecipe[0], iLike: (myVote.length > 0 ? true : false), countVotes: countVotes});
+        }
+    });
+});
+
+//show get route
 app.get("/showRecipe/:id", function(req, res) {
 
     recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
@@ -167,7 +182,6 @@ app.get("/listRecipes", function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            console.log(recipes);
             res.render("listRecipes", {recipes: recipes});
         }
     });
