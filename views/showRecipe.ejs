@@ -18,25 +18,29 @@
         <input type="text" class="form-control" id="recipeLikesCount" placeholder="<%= countVotes %>">
     </div>
     <div class="form-group">
-        <label for="iLike">iLike</label>
-        <input type="text" class="form-control" id="iLike" placeholder="<%= iLike %>">
-    </div>
-    <div class="form-group">
         <label for="recipeText">Recipe</label>
         <textarea class="form-control" id="recipeText" rows="5"><%= recipe.text %></textarea>
     </div>
 </fieldset>
 
+<% if(iLike == false) { %>
 <form action="/showRecipe/<%= recipe.id %>/like" method="POST">
-    <button type="submit" class="btn btn-success">Like</button>
+    <button type="submit" class="btn btn-success">YUMMMIE it!</button>
 </form>
+<% } %>
 
-<form action="/showRecipe/<%= recipe.id %>/unlike" method="POST">
-    <button type="submit" class="btn btn-danger">Unlike</button>
-</form>
+<% if(iLike == true) { %>
+    <form action="/showRecipe/<%= recipe.id %>/unlike" method="POST">
+        <button type="submit" class="btn btn-danger">unYUMMMIE it!</button>
+    </form>
+<% } %>
 
-<form action="/editRecipe/<%= recipe.id %>" method="GET">
-    <button type="submit" class="btn btn-warnning">Edit</button>
-</form>
+
+<% if(user && recipe.author.id.equals(user._id)) { %>
+    <br>
+    <form action="/editRecipe/<%= recipe.id %>" method="GET">
+        <button type="submit" class="btn btn-warnning">Edit</button>
+    </form>
+<% } %>
 
 <% include partials/footer %>

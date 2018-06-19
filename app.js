@@ -1,7 +1,8 @@
 var express                     = require("express");
 var app = express();
 
-
+var methodOverride = require("method-override");
+app.use(methodOverride("_method"));
 
 var bodyParser                  = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -37,6 +38,8 @@ app.use(function(req, res, next) {
     res.locals.user = req.user;
     next();
 });
+
+var middleware = require("./middleware");
 
 //entry point - redirect to whatever needed
 app.get("/", function(req, res) {
@@ -76,7 +79,6 @@ app.post("/login", passport.authenticate("local",
         successRedirect: "/listRecipes",
         failureRedirect: "/register"
     }), function(req, res){
-
 });
 
 app.get("/logout", function(req, res) {
@@ -89,8 +91,8 @@ app.get("/favourites", function(req, res) {
     res.redirect("listRecipes");
 });
 
-//show get route
-app.get("/editRecipe/:id", function(req, res) {
+//edit get route
+app.get("/editRecipe/:id", middleware.checkRecipeOwnership, function(req, res) {
 
     recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
         if(err) console.log(err);
@@ -105,11 +107,8 @@ app.get("/editRecipe/:id", function(req, res) {
 });
 
 
-app.put("/editRecipe/:id", function(req, res) {
-
-    console.log("du bist hier");
-
-    recipeMongooseObject.findByIdAndUpdate(req.params.id, {text: req.recipe.text, title: req.recipe.title}, function(err, updatedRecipe) {
+app.put("/editRecipe/:id", middleware.checkRecipeOwnership, function(req, res) {
+    recipeMongooseObject.findByIdAndUpdate(req.params.id, {text: req.body.recipe.text, title: req.body.recipe.title}, function(err, updatedRecipe) {
         if(err) console.log(err);
         else {
             res.redirect("/showRecipe/" + updatedRecipe.id);
@@ -119,7 +118,7 @@ app.put("/editRecipe/:id", function(req, res) {
 
 
 //show get route
-app.get("/showRecipe/:id", function(req, res) {
+app.get("/showRecipe/:id", middleware.isLoggedIn, function(req, res) {
 
     recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
         if(err) console.log(err);
@@ -136,7 +135,7 @@ app.get("/showRecipe/:id", function(req, res) {
 
 
 //like route
-app.post("/showRecipe/:id/like", function(req, res) {
+app.post("/showRecipe/:id/like", middleware.isLoggedIn, function(req, res) {
     recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
         if (err) console.log(err);
         else {
@@ -168,7 +167,7 @@ app.post("/showRecipe/:id/like", function(req, res) {
     });
 });
 
-app.post("/showRecipe/:id/unlike", function(req, res) {
+app.post("/showRecipe/:id/unlike", middleware.isLoggedIn, function(req, res) {
     recipeMongooseObject.findById(req.params.id).populate("votes").exec(function(err, foundRecipe) {
         if (err) console.log(err);
         else {
@@ -209,12 +208,12 @@ app.get("/contact", function(req, res) {
 
 //create routes
 //create recipe get route
-app.get("/createRecipe", function(req, res) {
+app.get("/createRecipe", middleware.isLoggedIn, function(req, res) {
     res.render("createRecipe");
 });
 
 //create recipe post route
-app.post("/createRecipe", function(req, res) {
+app.post("/createRecipe", middleware.isLoggedIn, function(req, res) {
 
     var title = req.body.recipe.title;
     var text = req.body.recipe.text;

@@ -3,22 +3,24 @@
 <form action="/editRecipe/<%= recipe.id %>?_method=PUT" method="POST">
     <div class="form-group">
         <label for="recipeTitle">Recipe Title</label>
-        <input type="text" name="recipe[title]" class="form-control" id="recipeTitle" placeholder="<%= recipe.title %>">
+        <input type="text" name="recipe[title]" class="form-control" id="recipeTitle" value="<%= recipe.title %>">
     </div>
     <fieldset disabled>
         <div class="form-group">
-            <label for="recipeCreated">User</label>
-            <input type="text" class="form-control" id="recipeCreated" placeholder="<%= recipe.author.username %>">
+            <label for="username">User</label>
+            <input type="text" class="form-control" id="username" placeholder="<%= recipe.author.username %>">
         </div>
 
         <div class="form-group">
             <label for="recipeCreated">Create Date</label>
             <input type="text" class="form-control" id="recipeCreated" placeholder="<%= recipe.created.toLocaleDateString("de-DE") %> %>">
         </div>
+
         <div class="form-group">
             <label for="recipeLikesCount">Likes</label>
             <input type="text" class="form-control" id="recipeLikesCount" placeholder="<%= countVotes %>">
         </div>
+
         <div class="form-group">
             <label for="iLike">iLike</label>
             <input type="text" class="form-control" id="iLike" placeholder="<%= iLike %>">
@@ -27,10 +29,10 @@
 
     <div class="form-group">
         <label for="recipeText">Recipe</label>
-        <textarea class="form-control" id="recipeText" rows="5"><%= recipe.text %></textarea>
+        <textarea class="form-control" name="recipe[text]" id="recipeText" rows="5"><%= recipe.text %></textarea>
     </div>
 
-    <button type="submit" class="btn btn-warnning">Edit</button>
+    <button type="submit" class="btn btn-warnning">Save!</button>
 </form>
 
 <% include partials/footer %>
